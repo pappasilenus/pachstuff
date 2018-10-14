@@ -1,0 +1,17 @@
+{
+  "pipeline": {
+    "name": "ef"
+  },
+  "input": {
+    "atom": {
+      "glob": "/*",
+      "repo": "movies"
+    }
+  },
+  "transform": {
+      "cmd": [ "python", "/ef.py", "/pfs/movies", "/pfs/out" ],
+    "image": "papposilenus/ef"
+  }
+}
+
+

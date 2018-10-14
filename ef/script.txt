@@ -1,0 +1,34 @@
+#   to build docker container
+# docker build -f Dockerfile <<tag>> .
+# docker tag <<tag>> papposilenus/ef:<<deploytag>>
+# docker push papposilenus/ef:<<deploytag>>
+#   and then put "papposilenus/ef:<<deploytag>>" in ef.json and edges.json for testing
+
+
+minikube delete
+minikube start
+pachctl deploy local
+
+#wait for it, checking with kubectl get pods
+#when writing prod, use script from etc/kube/check_pachd_ready.sh
+
+pachctl port-forward &
+
+pachctl create-repo movies
+pachctl create-pipeline -f ef.json
+
+#pachctl put-file movies master picklerick.mp4 -f /pfs/movies/picklerick.mp4
+#pachctl put-file movies master teaser.mp4 -f /pfs/movies/teaser.mp4
+#pachctl update-pipeline -f ef.json --reprocess
+
+#   for testing other pipelines
+
+#pachctl create-repo images
+#pachctl create-pipeline -f edges.json
+#pachctl put-file images master liberty.png -f http://imgur.com/46Q8nDz.png
+#pachctl put-file images master AT-AT.png -f http://imgur.com/8MN9Kg0.png
+#pachctl put-file images master kitten.png -f http://imgur.com/g2QnNqa.png
+#pachctl put-file images master jk.jpg -f images/jk.jpg
+#pachctl put-file images master fine.jpg -f images/fine.jpg
+#pachctl update-pipeline -f edges.json
+
